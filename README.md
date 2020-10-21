@@ -3,7 +3,7 @@ Challenge FlyDevs
 
 A challenge project
 CRUD operations with users
-RESTful APis using Node.js, Express, Mongoose.
+(RESTful APis using Node.js, Express, Mongoose)
 
 ## Features
 - **Testing**: integration test using [Jest](https://jestjs.io)
