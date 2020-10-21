@@ -1,7 +1,8 @@
 # users-app
 Challenge FlyDevs
 
-A starter/challenge project, CRUD operations with users
+A challenge project
+CRUD operations with users
 RESTful APis using Node.js, Express, Mongoose.
 
 ## Features
