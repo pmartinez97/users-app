@@ -105,3 +105,20 @@ An access token is valid forever. Does not have expiration time
 Linting is done using [ESLint](https://eslint.org/) and [Prettier](https://prettier.io).
 
 To modify the ESLint configuration, update the `.eslintrc.json` file.
+
+## Postman Collection
+
+Import "app-users.postman_collection.json" file into Postman App to see examples of request
+
+## MongoDb Atlas
+
+There is a database in MongoDb Atlas to test the application.
+
+```
+# Put it in the .env file by modifying the DB_URI variable
+DB_URI=mongodb+srv://mark:asd@cluster0.rnwtn.mongodb.net/Cluster0?retryWrites=true&w=majority
+```
+
+User: mark
+Password: asd
+Cluster: Cluster0
