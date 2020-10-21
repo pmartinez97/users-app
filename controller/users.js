@@ -53,16 +53,20 @@ const updateUser = async (req, res) => {
   }
   const { name, email, age, lastname, password } = req.body;
 
-  try {
-    let salt = await bcrypt.genSalt(parseInt(BCRYPT_SALT_ROUNDS));
-    newPass = await bcrypt.hash(password, salt);
-  } catch (err) {
-    return res.status(400).send(`Error! ${err}`);
+  let newPass = undefined;
+
+  if (typeof password !== "undefined" && password.length > 0) {
+    try {
+      let salt = await bcrypt.genSalt(parseInt(BCRYPT_SALT_ROUNDS));
+      newPass = await bcrypt.hash(password, salt);
+    } catch (err) {
+      return res.status(400).send(`Error! ${err}`);
+    }
   }
 
   User.findByIdAndUpdate(
     req.params.id,
-    { name, email, age, lastname, password },
+    { name, email, age, lastname, password: newPass },
     { omitUndefined: true }
   )
     .then(() => {
@@ -115,7 +119,6 @@ const loginUser = async (req, res) => {
   User.findOne({ email: req.body.email })
     .then(async (user) => {
       if (!user) {
-        console.log("ASDASD");
         return res.status(401).json({
           message: "Auth failed",
         });

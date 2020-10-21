@@ -32,7 +32,13 @@ test("Create test user", async () => {
 });
 
 test("Sign up as test user", async () => {
-  await request(app).post("/users/login").send(testUser).expect(200);
+  await request(app)
+    .post("/users/login")
+    .send(testUser)
+    .expect(200)
+    .then((response) => {
+      expect(response.body.message).toBe("Auth successful");
+    });
 });
 
 afterAll((done) => {
