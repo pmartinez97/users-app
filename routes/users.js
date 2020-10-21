@@ -13,6 +13,7 @@ router.post(
     check("password")
       .exists()
       .isString()
+      .notEmpty()
       .withMessage("password field is required"),
   ],
   userController.loginUser
@@ -26,6 +27,7 @@ router.post(
     check("password")
       .exists()
       .isString()
+      .notEmpty()
       .withMessage("password field is required"),
     check("email").exists().withMessage("email field is required").isEmail(),
   ],
@@ -37,11 +39,11 @@ router.put(
   "/update/:id",
   checkAuth,
   oneOf([
-    check("name").exists().isString(),
-    check("password").exists().isString(),
+    check("name").exists().isString().notEmpty(),
+    check("password").exists().isString().notEmpty(),
     check("email").exists().isEmail(),
     check("age").exists().isInt(),
-    check("lastname").exists().isString(),
+    check("lastname").exists().isString().notEmpty(),
   ]),
   userController.updateUser
 );

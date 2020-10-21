@@ -53,6 +53,14 @@ const updateUser = async (req, res) => {
   }
   const { name, email, age, lastname, password } = req.body;
 
+  if (typeof email !== "undefined" && email.length > 0) {
+    let user = await User.findOne({ email: email });
+
+    if (user) {
+      return res.status(400).send("The email is invalid or already taken!");
+    }
+  }
+
   let newPass = undefined;
 
   if (typeof password !== "undefined" && password.length > 0) {
