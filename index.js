@@ -5,6 +5,14 @@ const isAuth = require("./middleware/is-auth");
 const app = express();
 require("dotenv").config();
 
+// Apollo dependencies
+const { ApolloServer } = require("apollo-server-express");
+const typeDefs = require("./graphql/typeDefs");
+const resolvers = require("./graphql/resolvers");
+
+// Environment vars
+const port = process.env.PORT || 4000;
+
 // Database connection
 require("./database");
 
@@ -15,7 +23,7 @@ app.use(isAuth);
 app.use(express.json());
 app.use("/", router);
 
-// Environment vars
-const port = process.env.PORT || 4000;
+const server = new ApolloServer({ typeDefs, resolvers });
+server.applyMiddleware({ app });
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));

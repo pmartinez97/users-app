@@ -114,7 +114,7 @@ const findUser = async (req, res) => {
       return res.send(result);
     })
     .catch((err) => {
-      return res.status(400).send(`Delete failed with error: ${err}`);
+      return res.status(400).send(`Find user failed with error: ${err}`);
     });
 };
 
