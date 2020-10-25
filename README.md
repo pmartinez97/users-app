@@ -6,6 +6,7 @@ CRUD operations with users
 (RESTful APis using Node.js, Express, Mongoose)
 
 ## Features
+- **GraphQl**: [Apollo server](https://www.apollographql.com/docs/apollo-server/v1/)
 - **Testing**: integration test using [Jest](https://jestjs.io)
 - **Develop**: [Nodemon](https://nodemon.io/)
 - **Dependency management**: with [Npm](https://docs.npmjs.com/about-npm/)
@@ -73,6 +74,28 @@ List of available routes:
 `GET /users/userlist` - get all users\
 `GET /users/userlist?param=value` - filter users\
 `DELETE /users/delete/:userId` - delete user
+
+### Graphql playground
+- Open your browser to this address: http://localhost:<app_port> and run the available commands:
+1. Login (example)
+```graphQL
+query loginexample{
+  login( email: "admin@example.com", password: "123456") {
+    message
+    token
+  }
+}
+```
+
+#### See all Queries and Mutations in "DOCS" Tab
+
+Info: In order to Delete or update an user, the request must have an  Authorization Header ( You get it by logging in with a user )
+```bash
+# In HTTP headers tab
+{
+  "Authorization": "Bearer TOKEN"
+}
+```
 
 ## Validation
 
