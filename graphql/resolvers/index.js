@@ -29,8 +29,32 @@ const Resolvers = {
 
   Mutation: {
     create: async (root, args) => {
-      console.log(args);
       return await users.createUser(args);
+    },
+
+    deleteUser: async (root, { id }, { authScope }) => {
+      if (authScope === null || id != authScope._id) {
+        throw new Error("You cannot delete this user account!");
+      }
+
+      users
+        .deleteUser(id)
+        .then(() => {
+          return "User deleted succesfully!";
+        })
+        .catch((err) => {
+          return `Delete failed with error: ${err}`;
+        });
+    },
+
+    updateUser: async (root, args, { authScope }) => {
+      if (authScope === null || args.id != authScope._id) {
+        throw new Error("You cannot delete this user account!");
+      }
+
+      let user = await users.updateUser(args);
+
+      return user;
     },
   },
 };

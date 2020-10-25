@@ -2,7 +2,6 @@
 const express = require("express");
 const router = require("./routes/index");
 const isAuth = require("./middleware/is-auth");
-const { User } = require("./models/User");
 const { auth } = require("./utils/");
 const app = express();
 require("dotenv").config();
@@ -44,10 +43,7 @@ const server = new ApolloServer({
       const user = userId ? await auth.getUser(userId) : null;
 
       // add the user to the context
-      return {
-        authScope: user,
-        User,
-      };
+      return { authScope: user };
     }
   },
 });

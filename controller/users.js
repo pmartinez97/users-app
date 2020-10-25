@@ -1,12 +1,7 @@
-const { User } = require("../models/User");
-const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
-const { auth, users } = require("../utils/");
+const { users } = require("../utils/");
 
 require("dotenv").config();
-
-// Environment vars
-const BCRYPT_SALT_ROUNDS = process.env.BCRYP_ROUNDS;
 
 const createUser = async (req, res) => {
   const validationErrors = validationResult(req).array();
@@ -26,12 +21,10 @@ const createUser = async (req, res) => {
       res.send(usr);
     })
     .catch((err) => {
-      return res
-        .status(400)
-        .send({
-          message: "The email is invalid or already taken!",
-          error: err,
-        });
+      return res.status(400).send({
+        message: "The email is invalid or already taken!",
+        error: err,
+      });
     });
 };
 
@@ -46,32 +39,20 @@ const updateUser = async (req, res) => {
   }
   const { name, email, age, lastname, password } = req.body;
 
-  if (typeof email !== "undefined" && email.length > 0) {
-    let user = await User.findOne({ email: email });
-
-    if (user) {
-      return res.status(400).send("The email is invalid or already taken!");
-    }
-  }
-
-  let newPass = undefined;
-
-  if (typeof password !== "undefined" && password.length > 0) {
-    try {
-      let salt = await bcrypt.genSalt(parseInt(BCRYPT_SALT_ROUNDS));
-      newPass = await bcrypt.hash(password, salt);
-    } catch (err) {
-      return res.status(400).send(`Error! ${err.message}`);
-    }
-  }
-
-  User.findByIdAndUpdate(
-    req.params.id,
-    { name, email, age, lastname, password: newPass },
-    { omitUndefined: true }
-  )
-    .then(() => {
-      return res.send(`User updated succesfully!`);
+  users
+    .updateUser({
+      id: req.params.id,
+      name,
+      email,
+      age,
+      lastname,
+      password,
+    })
+    .then((user) => {
+      return res.send({
+        message: "User updated succesfully!",
+        user: user,
+      });
     })
     .catch((err) => {
       return res.status(400).send(`Update failed with error: ${err.message}`);
@@ -79,7 +60,8 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  User.deleteOne({ _id: req.params.id })
+  users
+    .deleteUser(req.params.id)
     .then(() => {
       return res.send(`User deleted.`);
     })

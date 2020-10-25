@@ -1,13 +1,14 @@
 const { User } = require("../models/User");
 const jwt = require("jsonwebtoken");
 const auth = require("./auth");
+const bcrypt = require("bcrypt");
 
 require("dotenv").config();
 // Environment vars
+const BCRYPT_SALT_ROUNDS = process.env.BCRYP_ROUNDS;
 const JWT_KEY = process.env.JWT_PRIVATE_KEY;
 
 const createUser = (args) => {
-  console.log(args);
   return new Promise(async (resolve, reject) => {
     let user = await User.findOne({ email: args.email });
     if (user) reject(err);
@@ -76,8 +77,46 @@ const loginUser = async (args) => {
   return token;
 };
 
+const deleteUser = (userId) => {
+  return new Promise((resolve, reject) => {
+    User.deleteOne({ _id: userId })
+      .then((op) => resolve(op))
+      .catch((err) => reject(err));
+  });
+};
+
+const updateUser = async (args) => {
+  let params = {};
+  for (let prop in args)
+    if (args[prop] && prop != "id") params[prop] = args[prop];
+
+  if (typeof args.email !== "undefined" && args.email.length > 0) {
+    let user = await User.findOne({ email: args.email });
+
+    if (user) {
+      throw new Error("The email is invalid or already taken!");
+    }
+  }
+
+  if (typeof args.password !== "undefined" && args.password.length > 0) {
+    try {
+      let salt = await bcrypt.genSalt(parseInt(BCRYPT_SALT_ROUNDS));
+      params.password = await bcrypt.hash(args.password, salt);
+    } catch (err) {
+      throw new Error(`Error! ${err.message}`);
+    }
+  }
+
+  return User.findByIdAndUpdate(args.id, params, {
+    omitUndefined: true,
+    new: true,
+  });
+};
+
 module.exports = {
   createUser,
   findUsers,
   loginUser,
+  deleteUser,
+  updateUser,
 };
