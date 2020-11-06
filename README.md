@@ -76,7 +76,7 @@ List of available routes:
 `DELETE /users/delete/:userId` - delete user
 
 ### Graphql playground
-- Open your browser to this address: http://localhost:<app_port> and run the available commands:
+- Open your browser to this address: http://localhost:<app_port>/graphql and run the available commands:
 1. Login (example)
 ```graphQL
 query loginexample{
