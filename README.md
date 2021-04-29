@@ -1,5 +1,4 @@
 # users-app
-Challenge FlyDevs
 
 A challenge project
 CRUD operations with users
